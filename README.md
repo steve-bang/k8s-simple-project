@@ -6,7 +6,7 @@ and includes two services: `mongodb-service` (internal) and `mongo-express-servi
 It configures secrets for username and password to connect to MongoDB from Mongo Express
 and uses a ConfigMap for MongoDB connection configuration.
 
-![Design](img/design.png)
+![Design](img/Design.png)
 
 # Implementation
 
