@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-deployment-demo
+  labels:
+    app: mongo-express-label
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express-label
+  template:
+    metadata:
+      labels:
+        app: mongo-express-label
+    spec:
+      containers:
+      - name: mongo-express
+        image: mongo-express
+        ports:
+        - containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME # Environment variable of the mongodb container
+          valueFrom:
+            secretKeyRef: # Gets the value from a secret key
+              name: mongodb-credentials-secret
+              key: mongodb-root-username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials-secret
+              key: mongodb-root-password
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-configmap
+              key: database_url
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+spec:
+  selector:
+    app: mongo-express-label
+  type: LoadBalancer # Exposes the service to the internet using the LoadBalancer type. But it not very well.
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30000
