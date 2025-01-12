@@ -101,3 +101,42 @@ Finally, start the Mongo Express project using:
 minikube service mongo-express-service
 ```
 
+
+# Azure K8s Service
+
+Create Aks on Azure:
+
+``` bash
+az aks create \
+    --resource-group AksSimply \
+    --name SteveClusterDemo \
+    --node-count 1 \
+    --generate-ssh-keys
+```
+
+Connect to the cluster
+
+``` bash
+az aks get-credentials --resource-group AksSimply --name SteveClusterDemo
+```
+
+Check node
+``` bash
+kubectl get nodes
+```
+
+Create azure disk for vm
+
+``` bash
+az disk create \                                             
+  --resource-group AksSimply \
+  --name name-disk \
+  --size-gb 1 \ 
+  --query id --output tsv
+```
+
+# Additional
+The user/password default for mogo-express: admin/pass
+
+Work with normal just gas difirence node. In the local, the node is minikube. 
+Good luck!
